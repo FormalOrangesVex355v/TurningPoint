@@ -6,6 +6,11 @@ Download availble here:
 
    http://www.robotc.net/release/vexrobotics/msi/
 
+# Git client
+Download the Windows Git client here:
+
+   https://git-scm.com/download/win
+
 # First project
 Program that allows the driver to control the Mecanum Drive Train, based on:
 
