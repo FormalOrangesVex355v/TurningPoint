@@ -4,12 +4,12 @@ Code for the Turning Point season
 # VEX RobotC
 Download availble here:
 
-   http://www.robotc.net/release/vexrobotics/msi/
+    http://www.robotc.net/release/vexrobotics/msi/
 
 # Git client
 Download the Windows Git client here:
 
-   https://git-scm.com/download/win
+    https://git-scm.com/download/win
 
 # First project
 Program that allows the driver to control the Mecanum Drive Train, based on:
@@ -23,4 +23,4 @@ Based on:
 
 As well as: 
 
-    https://www.vexforum.com/index.php/10222-how-to-program-lcd-display-robotc/0
+    https://www.vexforum.com/index.php/10222-how-to-program-lcd-display-robotc/6
