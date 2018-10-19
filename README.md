@@ -1,6 +1,11 @@
 # TurningPoint
 Code for the Turning Point season
 
+# VEX RobotC
+Download here:
+
+   http://www.robotc.net/release/vexrobotics/msi/
+
 # First project
 Program that allows the driver to control the Mecanum Drive Train, based on:
 
