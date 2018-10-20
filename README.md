@@ -41,7 +41,11 @@ You could also abandon all by doing:
 As you are working, you can checkpoint local work:
 
     git status
-    
+
+This will show all the differences between local work and what is pushed to GitHub:
+
+    git diff
+
 This will show you any uncommitted local work
 
     git add filename
