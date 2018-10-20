@@ -2,7 +2,7 @@
 Code for the Turning Point season
 
 # VEX RobotC
-Download availble here:
+Download available here:
 
     http://www.robotc.net/release/vexrobotics/msi/
 
