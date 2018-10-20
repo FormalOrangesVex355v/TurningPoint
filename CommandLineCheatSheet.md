@@ -2,32 +2,32 @@ Some common commands to use in the Git Bash Shell (remember Directory and FileNa
 
 Print Working Directory:
 
-   pwd
+      pwd
 
 List Directory contents:
 
-   ls
+      ls
    
 Change Directory to a directory in the current directory:
 
-   cd DirectoryName
+      cd DirectoryName
 
 Change Directory to an absolute path:
 
-   cd /c/Some/Directory/Path
+      cd /c/Some/Directory/Path
    
 Make a new directory:
 
-   mkdir NewDirectoryName
+      mkdir NewDirectoryName
    
 Copy a file:
 
-   cp /c/Some/Path/file /c/Some/Other/Path/newfile
+      cp /c/Some/Path/file /c/Some/Other/Path/newfile
   
 Remove a file (there are no backsies on this, so be careful!!!!!):
 
-   rm filename
+      rm filename
 
 To recursively remove everything in an entire directory (VERY DANGEROUS):
 
-  rm -r DirectoryName
+      rm -r DirectoryName
