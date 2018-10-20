@@ -79,5 +79,3 @@ Based on:
 As well as: 
 
     https://www.vexforum.com/index.php/10222-how-to-program-lcd-display-robotc/6
-
-    my changes harith
