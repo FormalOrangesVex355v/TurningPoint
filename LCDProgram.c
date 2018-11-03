@@ -2,6 +2,8 @@
 #pragma config(Motor,  port3,           backRight,     tmotorNormal, openLoop, reversed)
 #pragma config(Motor,  port4,           frontLeft,     tmotorNormal, openLoop)
 #pragma config(Motor,  port5,           backLeft,      tmotorNormal, openLoop)
+#pragma config(Motor,  port6,           intakeMotor,      tmotorNormal, openLoop)
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*        Description: Competition template for VEX EDR                      */
@@ -165,6 +167,44 @@ task autonomous()
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
+/*
+We are creating task program for our rubber band flipper
+*/
+int stateOfIntake = 1;
+task handleIntake()
+{
+	ClearTimer(T1);
+	while(true)
+	{
+		if (vexRT[Btn6U] && time1[T1] > 500){
+			ClearTimer(T1);
+			if (stateOfIntake == 1){
+				stateOfIntake = 3;
+				} else {
+				stateOfIntake = 1;
+			} // stateOfIntake
+		} // if Btn6U
+
+		if (vexRT[Btn6D] && time1[T1] > 500){
+			ClearTimer(T1);
+			if (stateOfIntake == 1){
+				stateOfIntake = 2;
+				}else {
+				stateOfIntake = 1;
+			}
+		}
+
+		if (stateOfIntake == 1){
+			motor [intakeMotor] = 0;
+		}
+		if (stateOfIntake == 2){
+			motor [intakeMotor] = -127;
+		}
+		if (stateOfIntake == 3){
+			motor [intakeMotor] = 127;
+		}
+	}
+}
 /*+++++++++++++++++++++++++++++++++++++++++++++| Notes |++++++++++++++++++++++++++++++++++++++++++++
 Mecanum Drive with Deadzone Thresholds
 - This program allows you to remotely control a robot with mecanum wheels.
@@ -185,6 +225,7 @@ task usercontrol()
 	// User control code here, inside the loop
 	//Create "deadzone" variables. Adjust threshold value to increase/decrease deadzone
 	int X2 = 0, Y1 = 0, X1 = 0, threshold = 15;
+	startTask (handleIntake);
 	while (true)
 	{
 		// This is the main execution loop for the user control program.
@@ -219,4 +260,5 @@ task usercontrol()
 		motor[frontLeft] = Y1 + X2 + X1;
 		motor[backLeft] =  Y1 + X2 - X1;
 	}
+	stopAllTasks ();
 }
