@@ -79,3 +79,10 @@ Based on:
 As well as: 
 
     https://www.vexforum.com/index.php/10222-how-to-program-lcd-display-robotc/6
+
+# RobotC Examples
+
+Sensors:
+
+     http://www.robotc.net/wikiarchive/VEX2_Sensors_Overview
+     
