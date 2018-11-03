@@ -86,3 +86,7 @@ Sensors:
 
      http://www.robotc.net/wikiarchive/VEX2_Sensors_Overview
      
+Potentiometer with PID:
+
+     https://www.vexforum.com/index.php/17571-potentiometer-programming-in-robotc/0
+     
