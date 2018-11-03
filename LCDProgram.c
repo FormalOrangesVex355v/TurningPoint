@@ -147,9 +147,42 @@ void pre_auton()
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
+void robotDriveStraight(int runTime, int power)
+{
+	motor[frontRight] = power; //Full power is 127
+	motor[frontLeft] = power; //Full power is 127
+	motor[backRight] = power; //Full power is 127
+	motor[backLeft] = power; //Full power is 127
+	wait1Msec(runTime);	//Run for three seconds
+	motor[frontRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
+
+
+}
 
 task autonomous()
 {
+	if(autoMode==1){
+	displayLCDCenteredString(0, "flags");
+	robotDriveStraight(2000,127);
+	robotDriveStraight(2000,-127);
+}else if(autoMode==2){
+displayLCDCenteredString(0, "caps");
+robotDriveStraight(1800,127);
+robotDriveStraight(1800,-127);
+}
+else if(autoMode==3){
+displayLCDCenteredString(0, "flags");
+robotDriveStraight(2000,127);
+robotDriveStraight(2000,-127);
+}else if(autoMode==4){
+displayLCDCenteredString(0, "caps");
+robotDriveStraight(1800,127);
+robotDriveStraight(1800,-127);
+}
+
 	// ..........................................................................
 	// Insert user code here.
 	// ..........................................................................
@@ -159,7 +192,8 @@ task autonomous()
 }
 
 /*---------------------------------------------------------------------------*/
-/*                                                                           */
+/*
+*/
 /*                              User Control Task                            */
 /*                                                                           */
 /*  This task is used to control your robot during the user control phase of */
