@@ -90,3 +90,6 @@ Potentiometer with PID:
 
      https://www.vexforum.com/index.php/17571-potentiometer-programming-in-robotc/0
      
+RobotC Fundementals:
+
+     http://www.robotc.net/tutor/Cortex/cortex.php?platform=Cortex&unit=robotcfundamentals&lesson=2
