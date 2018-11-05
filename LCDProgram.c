@@ -2,6 +2,9 @@
 #pragma config(Motor,  port3,           backRight,     tmotorNormal, openLoop, reversed)
 #pragma config(Motor,  port4,           frontLeft,     tmotorNormal, openLoop)
 #pragma config(Motor,  port5,           backLeft,      tmotorNormal, openLoop)
+#pragma config(Motor,  port6,           intakeMotor,      tmotorNormal, openLoop)
+#pragma config(Motor,  port7,           cannonMotor,      tmotorNormal, openLoop)
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*        Description: Competition template for VEX EDR                      */
@@ -145,9 +148,55 @@ void pre_auton()
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
+void robotDriveStraight(int runTime, int power)
+{
+	motor[frontRight] = power; //Full power is 127
+	motor[frontLeft] = power; //Full power is 127
+	motor[backRight] = power; //Full power is 127
+	motor[backLeft] = power; //Full power is 127
+	wait1Msec(runTime);	//Run for three seconds
+	motor[frontRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
 
+
+}
+void robotDriveStrafe(int runTime, int power) // Strafe - Not In Use
+{
+	motor[frontRight] = -1*power; //Full power is 127
+	motor[frontLeft] = power; //Full power is 127
+	motor[backRight] = power; //Full power is 127
+	motor[backLeft] = -1*power; //Full power is 127
+	wait1Msec(runTime);	//Run for three seconds
+	motor[frontRight] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[backLeft] = 0;
+
+
+}
 task autonomous()
 {
+	if(autoMode==1){
+		displayLCDCenteredString(0, "flags");
+		robotDriveStraight(2000,127);
+		robotDriveStraight(2000,-127);
+		}else if(autoMode==2){
+		displayLCDCenteredString(0, "caps");
+		robotDriveStraight(1800,127);
+		robotDriveStraight(1800,-127);
+	}
+	else if(autoMode==3){
+		displayLCDCenteredString(0, "flags");
+		robotDriveStraight(2000,127);
+		robotDriveStraight(2000,-127);
+		}else if(autoMode==4){
+		displayLCDCenteredString(0, "caps");
+		robotDriveStraight(1800,127);
+		robotDriveStraight(1800,-127);
+	}
+
 	// ..........................................................................
 	// Insert user code here.
 	// ..........................................................................
@@ -157,7 +206,8 @@ task autonomous()
 }
 
 /*---------------------------------------------------------------------------*/
-/*                                                                           */
+/*
+*/
 /*                              User Control Task                            */
 /*                                                                           */
 /*  This task is used to control your robot during the user control phase of */
@@ -165,6 +215,56 @@ task autonomous()
 /*                                                                           */
 /*  You must modify the code to add your own robot specific commands here.   */
 /*---------------------------------------------------------------------------*/
+/*
+We are creating task program for our rubber band flipper
+*/
+int stateOfIntake = 1;
+task handleIntake()
+{
+	ClearTimer(T1);
+	while(true)
+	{
+		if (vexRT[Btn5U] && time1[T1] > 500){
+			ClearTimer(T1);
+			if (stateOfIntake == 1){
+				stateOfIntake = 3;
+				} else {
+				stateOfIntake = 1;
+			} // stateOfIntake
+		} // if Btn6U
+
+		if (vexRT[Btn5D] && time1[T1] > 500){
+			ClearTimer(T1);
+			if (stateOfIntake == 1){
+				stateOfIntake = 2;
+				}else {
+				stateOfIntake = 1;
+			}
+		}
+
+		if (stateOfIntake == 1){
+			motor [intakeMotor] = 0;
+		}
+		if (stateOfIntake == 2){
+			motor [intakeMotor] = -127;
+		}
+		if (stateOfIntake == 3){
+			motor [intakeMotor] = 127;
+		}
+	} wait10Msec(5);
+}
+
+task ballCannon() // Ball Cannon
+{
+	while(true)
+	{
+		if (vexRT[Btn6U] ){ // { if Btn6U
+			motor [intakeMotor] = 127;
+		} // if Btn6U }
+		else { // if not Btn6U {
+			motor [intakeMotor] = 0; }
+	} wait10Msec(5);
+} // if not Btn6U }
 /*+++++++++++++++++++++++++++++++++++++++++++++| Notes |++++++++++++++++++++++++++++++++++++++++++++
 Mecanum Drive with Deadzone Thresholds
 - This program allows you to remotely control a robot with mecanum wheels.
@@ -185,6 +285,7 @@ task usercontrol()
 	// User control code here, inside the loop
 	//Create "deadzone" variables. Adjust threshold value to increase/decrease deadzone
 	int X2 = 0, Y1 = 0, X1 = 0, threshold = 15;
+	startTask (handleIntake);
 	while (true)
 	{
 		// This is the main execution loop for the user control program.
@@ -219,4 +320,5 @@ task usercontrol()
 		motor[frontLeft] = Y1 + X2 + X1;
 		motor[backLeft] =  Y1 + X2 - X1;
 	}
+	stopAllTasks ();
 }
