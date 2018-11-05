@@ -97,3 +97,47 @@ RobotC Fundementals:
 Improved Mecanum Drive:
 
      https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/60054-mecanum-wheels-programming
+
+# Notes from Graham Henderson on 11/4/2018
+
+1. Using the data log to record and graph data
+```C
+      datalogDataGroupStart();
+
+      datalogAddValue( 0, (int16_t)output );
+      datalogAddValue( 1, (int32_t)thePid->target );
+      datalogAddValue( 2, (int32_t)position );
+      datalogAddValue( 3, (int32_t)(error *thePid->kp));
+      datalogAddValue( 4, (int32_t)(thePid->integral * thePid->ki * 100));
+      datalogAddValue( 5, (int32_t)(thePid->kd * ( error - thePid->prevError) * 10));
+
+      datalogDataGroupEnd();
+```
+
+2.  Typical writing to the message log
+
+```C
+writeDebugStream( "\nx    = %3d y    = %3d\n", x , y );
+```
+
+3. Stuff from the board - using #define to characterize the drive train
+
+```C
+#define DRV_CNT_PER_REV_STD       (627.2)
+#define DRV_RPM_STD                   (100.0)
+#define DRV_CNT_PER_REV_HS       (392.0)
+#define DRV_RPM_HS                    (160.0)
+
+                                      // using high speed gearing
+#define DRV_CNT_PER_REV       DRV_CNT_PER_REV_HS
+#define DRV_RPM                       DRV_RPM_HS
+#define WHEEL_DIAMETER_IN             (4.2) // modify to dial in the distance
+
+#define WHEEL_CIRCUMFRENCE ( WHEEL_DIAMETER_IN * PI)
+#define COUNTS_PER_INCH               ( DRV_CNT_PER_REV / WHEEL_CIRCUMFRENCE )
+#define INCHES_TO_COUNTS(_x_)       ( COUNTS_PER_INCH * _x_)
+```
+
+# Blog Post on Datalog from Renegade Robotics
+
+     https://renegaderobotics.org/robotc-datalog/
