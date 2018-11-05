@@ -79,3 +79,21 @@ Based on:
 As well as: 
 
     https://www.vexforum.com/index.php/10222-how-to-program-lcd-display-robotc/6
+
+# RobotC Examples
+
+Sensors:
+
+     http://www.robotc.net/wikiarchive/VEX2_Sensors_Overview
+     
+Potentiometer with PID:
+
+     https://www.vexforum.com/index.php/17571-potentiometer-programming-in-robotc/0
+     
+RobotC Fundementals:
+
+     http://www.robotc.net/tutor/Cortex/cortex.php?platform=Cortex&unit=robotcfundamentals&lesson=2
+
+Improved Mecanum Drive:
+
+     https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/60054-mecanum-wheels-programming

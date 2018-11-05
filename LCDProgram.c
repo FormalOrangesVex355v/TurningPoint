@@ -3,7 +3,10 @@
 #pragma config(Motor,  port4,           frontLeft,     tmotorNormal, openLoop)
 #pragma config(Motor,  port5,           backLeft,      tmotorNormal, openLoop)
 #pragma config(Motor,  port6,           intakeMotor,      tmotorNormal, openLoop)
+<<<<<<< HEAD
 #pragma config(Motor,  port7,           cannonMotor,      tmotorNormal, openLoop)
+=======
+>>>>>>> 5218f40d758158e65520923d7284577c053c2b5f
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -162,6 +165,7 @@ void robotDriveStraight(int runTime, int power)
 
 
 }
+<<<<<<< HEAD
 void robotDriveStrafe(int runTime, int power) // Strafe - Not In Use
 {
 	motor[frontRight] = -1*power; //Full power is 127
@@ -174,11 +178,14 @@ void robotDriveStrafe(int runTime, int power) // Strafe - Not In Use
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
 
+=======
+>>>>>>> 5218f40d758158e65520923d7284577c053c2b5f
 
 }
 task autonomous()
 {
 	if(autoMode==1){
+<<<<<<< HEAD
 		displayLCDCenteredString(0, "flags");
 		robotDriveStraight(2000,127);
 		robotDriveStraight(2000,-127);
@@ -196,6 +203,25 @@ task autonomous()
 		robotDriveStraight(1800,127);
 		robotDriveStraight(1800,-127);
 	}
+=======
+	displayLCDCenteredString(0, "flags");
+	robotDriveStraight(2000,127);
+	robotDriveStraight(2000,-127);
+}else if(autoMode==2){
+displayLCDCenteredString(0, "caps");
+robotDriveStraight(1800,127);
+robotDriveStraight(1800,-127);
+}
+else if(autoMode==3){
+displayLCDCenteredString(0, "flags");
+robotDriveStraight(2000,127);
+robotDriveStraight(2000,-127);
+}else if(autoMode==4){
+displayLCDCenteredString(0, "caps");
+robotDriveStraight(1800,127);
+robotDriveStraight(1800,-127);
+}
+>>>>>>> 5218f40d758158e65520923d7284577c053c2b5f
 
 	// ..........................................................................
 	// Insert user code here.
@@ -224,7 +250,11 @@ task handleIntake()
 	ClearTimer(T1);
 	while(true)
 	{
+<<<<<<< HEAD
 		if (vexRT[Btn5U] && time1[T1] > 500){
+=======
+		if (vexRT[Btn6U] && time1[T1] > 500){
+>>>>>>> 5218f40d758158e65520923d7284577c053c2b5f
 			ClearTimer(T1);
 			if (stateOfIntake == 1){
 				stateOfIntake = 3;
@@ -233,7 +263,11 @@ task handleIntake()
 			} // stateOfIntake
 		} // if Btn6U
 
+<<<<<<< HEAD
 		if (vexRT[Btn5D] && time1[T1] > 500){
+=======
+		if (vexRT[Btn6D] && time1[T1] > 500){
+>>>>>>> 5218f40d758158e65520923d7284577c053c2b5f
 			ClearTimer(T1);
 			if (stateOfIntake == 1){
 				stateOfIntake = 2;
@@ -251,6 +285,7 @@ task handleIntake()
 		if (stateOfIntake == 3){
 			motor [intakeMotor] = 127;
 		}
+<<<<<<< HEAD
 	} wait10Msec(5);
 }
 
@@ -265,6 +300,10 @@ task ballCannon() // Ball Cannon
 			motor [intakeMotor] = 0; }
 	} wait10Msec(5);
 } // if not Btn6U }
+=======
+	}
+}
+>>>>>>> 5218f40d758158e65520923d7284577c053c2b5f
 /*+++++++++++++++++++++++++++++++++++++++++++++| Notes |++++++++++++++++++++++++++++++++++++++++++++
 Mecanum Drive with Deadzone Thresholds
 - This program allows you to remotely control a robot with mecanum wheels.
