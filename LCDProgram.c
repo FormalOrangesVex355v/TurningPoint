@@ -4,7 +4,8 @@
 #pragma config(Motor,  port5,           backLeft,      tmotorNormal, openLoop)
 #pragma config(Motor,  port6,           intakeMotor,      tmotorNormal, openLoop)
 #pragma config(Motor,  port7,           cannonMotor,      tmotorNormal, openLoop)
-
+#pragma config(Motor,  port8,           aimCannonMotor,      tmotorNormal, openLoop)
+#pragma config(Motor,  port9,           liftMotor,      tmotorNormal, openLoop)
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*        Description: Competition template for VEX EDR                      */
@@ -20,14 +21,18 @@
 //Main competition background code...do not modify!
 #include "Vex_Competition_Includes.c"
 
+// Include James Pearman's Gyro Lib
+// From: https://github.com/jpearman/RobotCLibs/tree/master/gyroLib
+#include "gyroLib2.c"
+
 // These are the different choices we have
 typedef enum {
 	kLcdDispStart = 0,
 
-	kLcdAuto_1    = 0,
-	kLcdAuto_2,
-	kLcdAuto_3,
-	kLcdAuto_4,
+	kLcdRedFlags    = 0,
+	kLcdRedCaps,
+	kLcdBlueFlags,
+	kLcdBlueCaps,
 
 	kLcdDispNumber
 } kLcdDispType;
@@ -40,24 +45,24 @@ void lcdMenuDisplay(kLcdDispType current)
 {
 	//Switch case that allows the user to choose from 4 different options
 	switch(current){
-	case kLcdAuto_1:
+	case kLcdRedFlags:
 		//Display first choice
-		displayLCDCenteredString(0, "Red Left");
+		displayLCDCenteredString(0, "Red Flags");
 		displayLCDCenteredString(1, "<     Enter    >");
 		break;
-	case kLcdAuto_2:
+	case kLcdRedCaps:
 		//Display second choice
-		displayLCDCenteredString(0, "Red Right");
+		displayLCDCenteredString(0, "Red Caps");
 		displayLCDCenteredString(1, "<     Enter    >");
 		break;
-	case kLcdAuto_3:
+	case kLcdBlueFlags:
 		//Display third choice
-		displayLCDCenteredString(0, "Blue Left");
+		displayLCDCenteredString(0, "Blue Flags");
 		displayLCDCenteredString(1, "<     Enter    >");
 		break;
-	case kLcdAuto_4:
+	case kLcdBlueCaps:
 		//Display fourth choice
-		displayLCDCenteredString(0, "Blue Right");
+		displayLCDCenteredString(0, "Blue Caps");
 		displayLCDCenteredString(1, "<     Enter    >");
 		break;
 
@@ -74,7 +79,7 @@ void pre_auton()
 	TControllerButtons    Buttons;
 
 	// current choice
-	kLcdDispType    mode = kLcdAuto_1;
+	kLcdDispType    mode = kLcdRedFlags;
 
 	//Clear LCD
 	clearLCDLine(0);
@@ -129,9 +134,10 @@ void pre_auton()
 		if( Buttons == kButtonCenter )
 		{
 			displayLCDCenteredString(1, "<   Selected   >");
-			// set the autononomous mode (replaces choice variable from sdrobotics code)
+			// set the autononomous mode
 			autoMode = (short)mode;
 			wait1Msec(1000);
+			GyroInit();
 			return;
 		}
 
@@ -139,6 +145,7 @@ void pre_auton()
 		wait1Msec(25);
 	}
 }
+
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              Autonomous Task                              */
@@ -174,34 +181,37 @@ void robotDriveStrafe(int runTime, int power) // Strafe - Not In Use
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[backLeft] = 0;
-
 }
+
 task autonomous()
 {
-	if(autoMode==1){
+	GyroReinit();
+	if(autoMode==(short)kLcdRedFlags){
 		displayLCDCenteredString(0, "flags");
+		motor [cannonMotor] = -127;
+		wait1Msec(2000);
+		motor [cannonMotor] = 0;
 		robotDriveStraight(2000,127);
 		robotDriveStraight(2000,-127);
-		} else if(autoMode==2){
-		displayLCDCenteredString(0, "caps");
-		robotDriveStraight(1800,127);
-		robotDriveStraight(1800,-127);
-		} else if(autoMode==3){
-		displayLCDCenteredString(0, "flags");
-		robotDriveStraight(2000,127);
-		robotDriveStraight(2000,-127);
-		} else if(autoMode==4){
+	}
+	else if(autoMode==(short)kLcdRedCaps){
 		displayLCDCenteredString(0, "caps");
 		robotDriveStraight(1800,127);
 		robotDriveStraight(1800,-127);
 	}
-
-	// ..........................................................................
-	// Insert user code here.
-	// ..........................................................................
-
-	// Remove this function call once you have "real" code.
-	AutonomousCodePlaceholderForTesting();
+	else if(autoMode==(short)kLcdBlueFlags){
+		displayLCDCenteredString(0, "flags");
+		motor [cannonMotor] = -127;
+		wait1Msec(2000);
+		motor [cannonMotor] = 0;
+		robotDriveStraight(2000,127);
+		robotDriveStraight(2000,-127);
+	}
+	else if(autoMode==(short)kLcdBlueCaps){
+		displayLCDCenteredString(0, "caps");
+		robotDriveStraight(1800,127);
+		robotDriveStraight(1800,-127);
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -220,11 +230,11 @@ We are creating task program for our rubber band flipper
 int stateOfIntake = 1;
 task handleIntake()
 {
-	ClearTimer(T1);
+	clearTimer(T1);
 	while(true)
 	{
 		if (vexRT[Btn5U] && time1[T1] > 500){
-			ClearTimer(T1);
+			clearTimer(T1);
 			if (stateOfIntake == 1){
 				stateOfIntake = 3;
 				} else {
@@ -233,7 +243,7 @@ task handleIntake()
 		} // if Btn6U
 
 		if (vexRT[Btn5D] && time1[T1] > 500){
-			ClearTimer(T1);
+			clearTimer(T1);
 			if (stateOfIntake == 1){
 				stateOfIntake = 2;
 				}else {
@@ -254,18 +264,63 @@ task handleIntake()
 	} // while }
 }
 
+task capLifter()
+{
+	while(true)
+	{
+		if(vexRT[Btn7U]==1){
+			motor[liftMotor]=60;
+		}
+		else if(vexRT[Btn7D]==1){
+			motor[liftMotor]=-60;
+		}
+		else{
+			motor[liftMotor]=0;
+		}
+		wait10Msec(5);
+	}
+}
+
+task aimCannon() // Aim Cannon
+{
+	while(true)
+	{
+		motor [aimCannonMotor] = 0;
+		if (vexRT[Btn8U] ){ // { if Btn8U
+			motor [aimCannonMotor] = -35; //
+		} // if Btn6U }
+		if (vexRT[Btn8D] ){ // { if Btn6D
+			motor [aimCannonMotor] = 35; //
+		} // if Btn8D }
+		wait10Msec(5);
+	} // while }
+}
 task ballCannon() // Ball Cannon
 {
 	while(true)
 	{
 		if (vexRT[Btn6U] ){ // { if Btn6U
-			motor [intakeMotor] = 127;
+			motor [cannonMotor] = -127;
 		} // if Btn6U }
 		else { // if not Btn6U {
-			motor [intakeMotor] = 0;
+			motor [cannonMotor] = 0;
 		}
 		wait10Msec(5);
 	} // while }
+}
+
+task gyroLogger()
+{
+	while(true)
+	{
+		datalogDataGroupStart();
+
+		datalogAddValue( 0, GyroAngleAbsGet() );
+		datalogAddValue( 1, GyroAngleDegGet() );
+
+		datalogDataGroupEnd();
+		wait10Msec(5);
+	}
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++++| Notes |++++++++++++++++++++++++++++++++++++++++++++
@@ -279,16 +334,20 @@ This allows the robot to ignore values from the Joysticks when they fail to cent
 and provides a margin of error for the driver when they only want the robot to move in one axis.
 [I/O Port]          [Name]              [Type]                [Description]
 Motor Port 2        frontRight          VEX Motor             Front Right motor
-Motor Port 3        backRight           VEX Motor             Back Right motor
-Motor Port 4        frontLeft           VEX Motor             Front Left motor
-Motor Port 5        backLeft            VEX Motor             Back Left motor
+Motor Port 3        backRight           VE Motor             Front Left motor
+Motor Port 5        backLeft            VX Motor             Back Right motor
+Motor Port 4        frontLeft           VEXEX Motor             Back Left motor
 --------------------------------------------------------------------------------------------------*/
 task usercontrol()
 {
-	// User control code here, inside the loop
+	GyroReinit();
 	//Create "deadzone" variables. Adjust threshold value to increase/decrease deadzone
 	int X2 = 0, Y1 = 0, X1 = 0, threshold = 15;
 	startTask (handleIntake);
+	startTask (ballCannon);
+	startTask (gyroLogger);
+	startTask (aimCannon);
+	startTask (capLifter);
 	while (true)
 	{
 		// This is the main execution loop for the user control program.
@@ -322,6 +381,7 @@ task usercontrol()
 		motor[backRight] =  Y1 - X2 + X1;
 		motor[frontLeft] = Y1 + X2 + X1;
 		motor[backLeft] =  Y1 + X2 - X1;
+		wait10Msec(5);
 	}
 	stopAllTasks ();
 }
