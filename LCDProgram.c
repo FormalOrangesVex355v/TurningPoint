@@ -269,14 +269,26 @@ task capLifter()
 	while(true)
 	{
 		if(vexRT[Btn7U]==1){
-			motor[liftMotor]=60;
+			motor[liftMotor]=40;
 		}
 		else if(vexRT[Btn7D]==1){
-			motor[liftMotor]=-60;
+			motor[liftMotor]=-40;
 		}
 		else{
 			motor[liftMotor]=0;
 		}
+		wait10Msec(5);
+	}
+}
+
+task capLifter2()
+{
+	while(true)
+	{
+		if(vexRT[Btn7U]==1){
+			motor[liftMotor]=vexRT[Ch2]/2;
+		}
+
 		wait10Msec(5);
 	}
 }
@@ -347,7 +359,7 @@ task usercontrol()
 	startTask (ballCannon);
 	startTask (gyroLogger);
 	startTask (aimCannon);
-	startTask (capLifter);
+	startTask (capLifter2);
 	while (true)
 	{
 		// This is the main execution loop for the user control program.
@@ -371,10 +383,11 @@ task usercontrol()
 		else
 			X1 = 0;
 		//Create "deadzone" for X2/Ch1
-		if(abs(vexRT[Ch1]) > threshold)
-			X2 = vexRT[Ch1];
-		else
-			X2 = 0;
+		if(vexRT[btn7U]==0){
+			if(abs(vexRT[Ch1]) > threshold)
+				X2 = vexRT[Ch1];
+			else
+				X2 = 0;}
 
 		//Remote Control Commands
 		motor[frontRight] = Y1 - X2 - X1;
