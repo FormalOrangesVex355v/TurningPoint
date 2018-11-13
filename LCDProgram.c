@@ -189,7 +189,7 @@ task autonomous()
 	if(autoMode==(short)kLcdRedFlags){
 		displayLCDCenteredString(0, "flags");
 		motor [cannonMotor] = -127;
-		wait1Msec(2000);
+		wait1Msec(4000);
 		motor [cannonMotor] = 0;
 		robotDriveStraight(2000,127);
 		robotDriveStraight(2000,-127);
@@ -286,7 +286,7 @@ task capLifter2()
 	while(true)
 	{
 		if(vexRT[Btn7U]==1){
-			motor[liftMotor]=vexRT[Ch2]/2;
+			motor[liftMotor]=60;
 		}
 
 		wait10Msec(5);
@@ -299,10 +299,10 @@ task aimCannon() // Aim Cannon
 	{
 		motor [aimCannonMotor] = 0;
 		if (vexRT[Btn8U] ){ // { if Btn8U
-			motor [aimCannonMotor] = -35; //
+			motor [aimCannonMotor] = 35; //
 		} // if Btn6U }
 		if (vexRT[Btn8D] ){ // { if Btn6D
-			motor [aimCannonMotor] = 35; //
+			motor [aimCannonMotor] = -25; //
 		} // if Btn8D }
 		wait10Msec(5);
 	} // while }
@@ -359,6 +359,7 @@ task usercontrol()
 	startTask (ballCannon);
 	startTask (gyroLogger);
 	startTask (aimCannon);
+	startTask (capLifter);
 	startTask (capLifter2);
 	while (true)
 	{
